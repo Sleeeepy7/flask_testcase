@@ -23,6 +23,13 @@ def create_user(db: Session, username: str, password_hash: str) -> User:
     return user
 
 
+def get_all_users(db: Session):
+    """
+    Получить всех пользователей.
+    """
+    return db.query(User)
+
+
 def delete_user(db: Session, user_id: int) -> None:
     """
     Удалить пользователя по ID.
