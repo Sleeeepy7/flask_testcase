@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Дашборд{% endblock %}
+
+{% block content %}
+<section>
+    <h2>Статистика</h2>
+    <p><strong>Количество пользователей:</strong> {{ user_count }}</p>
+    <p><strong>Количество транзакций:</strong> {{ transaction_count }}</p>
+    <p><strong>Сумма транзакций за сегодня:</strong> {{ total_transactions_today }}</p>
+</section>
+
+<section>
+    <h2>Последние транзакции</h2>
+    <table border="1" cellspacing="0" cellpadding="5">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Пользователь</th>
+                <th>Сумма</th>
+                <th>Статус</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in recent_transactions %}
+            <tr>
+                <td>{{ transaction.id }}</td>
+                <td>{{ transaction.user_id }}</td>
+                <td>{{ transaction.amount }}</td>
+                <td>{{ transaction.status }}</td>
+                <td>{{ transaction.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
