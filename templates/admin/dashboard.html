@@ -1,38 +1,32 @@
-{% extends "base.html" %}
+{% extends 'admin/master.html' %}
 
-{% block title %}Дашборд{% endblock %}
+{% block body %}
+<div class="container">
+  <h1>Дашборд</h1>
+  <p>Пользователей: {{ user_count }}</p>
+  <p>Транзакций: {{ transaction_count }}</p>
+  <p>Транзакций за сегодня: {{ total_transactions_today }}</p>
 
-{% block content %}
-<section>
-    <h2>Статистика</h2>
-    <p><strong>Количество пользователей:</strong> {{ user_count }}</p>
-    <p><strong>Количество транзакций:</strong> {{ transaction_count }}</p>
-    <p><strong>Сумма транзакций за сегодня:</strong> {{ total_transactions_today }}</p>
-</section>
-
-<section>
-    <h2>Последние транзакции</h2>
-    <table border="1" cellspacing="0" cellpadding="5">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Пользователь</th>
-                <th>Сумма</th>
-                <th>Статус</th>
-                <th>Дата</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for transaction in recent_transactions %}
-            <tr>
-                <td>{{ transaction.id }}</td>
-                <td>{{ transaction.user_id }}</td>
-                <td>{{ transaction.amount }}</td>
-                <td>{{ transaction.status }}</td>
-                <td>{{ transaction.created_at }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</section>
+  <h3>Последние транзакции</h3>
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th>ID</th>
+              <th>Сумма</th>
+              <th>Статус</th>
+              <th>Дата</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for tx in recent_transactions %}
+          <tr>
+              <td>{{ tx.id }}</td>
+              <td>{{ tx.amount }}</td>
+              <td>{{ tx.status }}</td>
+              <td>{{ tx.created_at }}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+</div>
 {% endblock %}

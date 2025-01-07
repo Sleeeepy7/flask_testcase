@@ -14,6 +14,13 @@ class TransactionStatus(enum.Enum):
     CANCELLED = "cancelled"  # Отменена
     EXPIRED = "expired"  # Истекла
 
+    def __str__(self):
+        translations = {"pending": "Ожидание", "confirmed": "Подтверждена", "cancelled": "Отменена", "expired": "Истекла"}
+        return translations[self.value]
+
+    def __repr__(self):
+        return str(self)
+
 
 class Transaction(Base):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)

@@ -4,8 +4,11 @@ from flasgger import Swagger
 from core.config import settings
 
 from cli.create_admin import create_admin
-from admin.views import admin_bp
+
+# from admin.views import admin_bp
+from admin.views import admin
 from api.routes import api_bp
+from webhook.routes import webhook_bp
 
 
 def create_app():
@@ -18,9 +21,12 @@ def create_app():
     # CLI commands
     app.cli.add_command(create_admin)
 
+    # admin
+    admin.init_app(app)
+
     # routes
-    app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(api_bp, url_prefix="/api")
+    app.register_blueprint(webhook_bp)
 
     return app
 

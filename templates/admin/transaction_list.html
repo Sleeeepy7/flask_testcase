@@ -1,0 +1,98 @@
+{% extends "admin/master.html" %}
+{% block body %}
+<div class="container mt-4">
+  <h2>Список транзакций (AJAX-обновление)</h2>
+
+  <label for="refreshSelect">Автообновление:</label>
+  <select id="refreshSelect" class="form-select" style="width:auto;" onchange="setAutoRefresh(this.value)">
+    <option value="0">Выключено</option>
+    <option value="10">10 секунд</option>
+    <option value="15">15 секунд</option>
+    <option value="30">30 секунд</option>
+    <option value="60">1 минута</option>
+  </select>
+
+  <table id="txTable" class="table table-bordered table-striped mt-3">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>ID Пользователя</th>
+        <th>Сумма</th>
+        <th>Комиссия</th>
+        <th>Статус</th>
+        <th>Создана</th>
+      </tr>
+    </thead>
+    <tbody id="txTableBody">
+      {% for tx in data %}
+      <tr>
+        <td>{{ tx.id }}</td>
+        <td>{{ tx.user_id }}</td>
+        <td>{{ tx.amount }}</td>
+        <td>{{ tx.commission }}</td>
+        <td>{{ tx.status }}</td>
+        <td>{{ tx.created_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+let refreshTimer = null;
+
+function setAutoRefresh(val) {
+  // сохраняем в куки
+  document.cookie = "refresh_interval=" + val + "; path=/";
+
+  if (refreshTimer) {
+    clearInterval(refreshTimer);
+    refreshTimer = null;
+  }
+  let interval = parseInt(val);
+  if (interval > 0) {
+    refreshTimer = setInterval(function() {
+      fetchTransactionsAndUpdate();
+    }, interval * 1000);
+  }
+}
+
+function fetchTransactionsAndUpdate() {
+  fetch("{{ get_url('.json_list') }}")
+    .then(response => response.json())
+    .then(data => {
+      let tbody = document.getElementById("txTableBody");
+      tbody.innerHTML = "";
+      data.forEach(tx => {
+        let tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${tx.id}</td>
+          <td>${tx.user_id}</td>
+          <td>${tx.amount}</td>
+          <td>${tx.commission}</td>
+          <td>${tx.status}</td>
+          <td>${tx.created_at}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    })
+    .catch(err => console.error("Fetch error:", err));
+}
+
+// интервал с куков
+document.addEventListener("DOMContentLoaded", function(){
+  const selectEl = document.getElementById("refreshSelect");
+  let savedVal = getCookie("refresh_interval");
+  if (savedVal) {
+    selectEl.value = savedVal;
+    setAutoRefresh(savedVal);
+  }
+});
+
+function getCookie(name) {
+  let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  if (match) return match[2];
+  return null;
+}
+</script>
+{% endblock %}
