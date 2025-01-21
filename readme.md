@@ -1,6 +1,6 @@
 # Flask Testcase Project
 
-## ТЗ
+## Документация
 - [Техническое задание (ТЗ)](TECHNICAL_REQUIREMENTS.md)
 
 ## Описание
