@@ -1,5 +1,7 @@
 # Flask Testcase Project
 
+## ТЗ
+- [Техническое задание (ТЗ)](TECHNICAL_REQUIREMENTS.md)
 
 ## Описание
 Проект включает в себя:
